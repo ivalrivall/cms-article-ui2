@@ -1,5 +1,6 @@
 import { h, resolveComponent } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
+import store from '@/store'
 
 import DefaultLayout from '@/layouts/DefaultLayout'
 
@@ -16,6 +17,7 @@ const routes = [
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
+        meta: { requiresAuth: true },
         component: () =>
           import(/* webpackChunkName: "dashboard" */ '@/views/Dashboard.vue'),
       },
@@ -27,11 +29,13 @@ const routes = [
       {
         path: '/theme/colors',
         name: 'Colors',
+        meta: { requiresAuth: true },
         component: () => import('@/views/theme/Colors.vue'),
       },
       {
         path: '/theme/typography',
         name: 'Typography',
+        meta: { requiresAuth: true },
         component: () => import('@/views/theme/Typography.vue'),
       },
       {
@@ -45,41 +49,49 @@ const routes = [
         redirect: '/base/breadcrumbs',
         children: [
           {
+            meta: { requiresAuth: true },
             path: '/base/accordion',
             name: 'Accordion',
             component: () => import('@/views/base/Accordion.vue'),
           },
           {
+            meta: { requiresAuth: true },
             path: '/base/breadcrumbs',
             name: 'Breadcrumbs',
             component: () => import('@/views/base/Breadcrumbs.vue'),
           },
           {
+            meta: { requiresAuth: true },
             path: '/base/cards',
             name: 'Cards',
             component: () => import('@/views/base/Cards.vue'),
           },
           {
+            meta: { requiresAuth: true },
             path: '/base/carousels',
             name: 'Carousels',
             component: () => import('@/views/base/Carousels.vue'),
           },
           {
+            meta: { requiresAuth: true },
             path: '/base/collapses',
             name: 'Collapses',
             component: () => import('@/views/base/Collapses.vue'),
           },
           {
+            meta: { requiresAuth: true },
             path: '/base/list-groups',
             name: 'List Groups',
             component: () => import('@/views/base/ListGroups.vue'),
           },
           {
+            meta: { requiresAuth: true },
             path: '/base/navs',
             name: 'Navs',
             component: () => import('@/views/base/Navs.vue'),
           },
           {
+            meta: { requiresAuth: true },
             path: '/base/paginations',
             name: 'Paginations',
             component: () => import('@/views/base/Paginations.vue'),
@@ -272,21 +284,25 @@ const routes = [
     },
     children: [
       {
+        meta: { requiresAuth: false },
         path: '404',
         name: 'Page404',
         component: () => import('@/views/pages/Page404'),
       },
       {
+        meta: { requiresAuth: false },
         path: '500',
         name: 'Page500',
         component: () => import('@/views/pages/Page500'),
       },
       {
+        meta: { requiresAuth: false },
         path: 'login',
         name: 'Login',
         component: () => import('@/views/pages/Login'),
       },
       {
+        meta: { requiresAuth: false },
         path: 'register',
         name: 'Register',
         component: () => import('@/views/pages/Register'),
@@ -302,6 +318,16 @@ const router = createRouter({
     // always scroll to top
     return { top: 0 }
   },
+})
+
+router.beforeEach(async (to) => {
+  if (to.meta.requiresAuth) {
+    await store.dispatch('auth/checkLogin')
+    // const isLoggedIn = await store.getters['auth/isLoggedIn']
+    // if (!isLoggedIn) {
+    // return { name: 'Login' }
+    // }
+  }
 })
 
 export default router
