@@ -1,6 +1,18 @@
 export default [
   {
     component: 'CNavItem',
+    name: 'Categories',
+    to: '/categories',
+    icon: 'cil-application',
+  },
+  {
+    component: 'CNavItem',
+    name: 'Posts',
+    to: '/posts',
+    icon: 'cil-spreadsheet',
+  },
+  {
+    component: 'CNavItem',
     name: 'Dashboard',
     to: '/dashboard',
     icon: 'cil-speedometer',

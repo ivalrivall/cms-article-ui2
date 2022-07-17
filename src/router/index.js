@@ -9,8 +9,26 @@ const routes = [
     path: '/',
     name: 'Home',
     component: DefaultLayout,
-    redirect: '/dashboard',
+    redirect: '/categories',
     children: [
+      {
+        path: '/categories',
+        name: 'Categories',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        meta: { requiresAuth: true },
+        component: () => import('@/views/allstar/Category.vue'),
+      },
+      {
+        path: '/posts',
+        name: 'Posts',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        meta: { requiresAuth: true },
+        component: () => import('@/views/allstar/Post.vue'),
+      },
       {
         path: '/dashboard',
         name: 'Dashboard',
